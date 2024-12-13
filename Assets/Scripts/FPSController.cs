@@ -12,7 +12,7 @@ public class FPSController : MonoBehaviour
     private CharacterController _controller;
     [SerializeField] private float mouseSensitivity = 200f;
     [SerializeField] private float speed = 5f;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cameraa;
     [SerializeField] private float xCameraBounds = 60f;
 
     public Transform groundChecker;
@@ -21,10 +21,6 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float _distance = 0.3f;
     private float _gravity = -10f; 
     private float _yVelocity;
-
-
-
-
 
     #region Smoothing code
     private Vector2 _currentMouseDelta;
@@ -52,8 +48,7 @@ public class FPSController : MonoBehaviour
 
     private void Movement()
     {
-        //_moveVector = new Vector3(Input.GetAxis("Horizontal"),0, Input.GetAxis("Vertical")) * speed * Time.deltaTime;//initial way of showing movement
-        _moveVector = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal"); //easier to explain after by using the forward and right vectors
+        _moveVector = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
         _moveVector.Normalize();
 
         _isGrounded = Physics.Raycast(groundChecker.position, Vector3.down, _distance);
@@ -81,7 +76,7 @@ public class FPSController : MonoBehaviour
         _xRotation -= _currentMouseDelta.y;
         _xRotation = Mathf.Clamp(_xRotation, -xCameraBounds, xCameraBounds);
         transform.Rotate(Vector3.up * _currentMouseDelta.x);
-        camera.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+        cameraa.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
 
