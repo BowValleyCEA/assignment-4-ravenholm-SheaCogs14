@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(CharacterController))] //this is a great thing to show people as it shows them how to make sure components will set up on objects.
+[RequireComponent(typeof(CharacterController))] 
 public class FPSController : MonoBehaviour
 {
+
+    [Header("FPS Settings")]
     private float _xRotation;
     private Vector3 _moveVector;
     private CharacterController _controller;
@@ -12,14 +14,24 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private Camera camera;
     [SerializeField] private float xCameraBounds = 60f;
-    
+
+    public Transform groundChecker;
+    private bool _isGrounded;
+    [SerializeField] private float _jumpForce = 8f;
+    [SerializeField] private float _distance = 0.3f;
+    private float _gravity = -10f; 
+    private float _yVelocity;
+
+
+
+
+
     #region Smoothing code
     private Vector2 _currentMouseDelta;
     private Vector2 _currentMouseVelocity;
     [SerializeField] private float smoothTime = .1f;
     
     #endregion
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
@@ -31,11 +43,11 @@ public class FPSController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
         Rotation();
+        Jump();
     }
 
     private void Movement()
@@ -43,7 +55,21 @@ public class FPSController : MonoBehaviour
         //_moveVector = new Vector3(Input.GetAxis("Horizontal"),0, Input.GetAxis("Vertical")) * speed * Time.deltaTime;//initial way of showing movement
         _moveVector = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal"); //easier to explain after by using the forward and right vectors
         _moveVector.Normalize();
-        _controller.SimpleMove(_moveVector * speed );
+
+        _isGrounded = Physics.Raycast(groundChecker.position, Vector3.down, _distance);
+
+        if (_isGrounded && _yVelocity < 0)
+        {
+            _yVelocity = -2f;
+        }
+        else
+        {
+            _yVelocity += _gravity * Time.deltaTime;
+        }
+
+        _moveVector.y = _yVelocity;
+
+        _controller.Move(_moveVector * speed * Time.deltaTime);
     }
 
     private void Rotation()
@@ -58,6 +84,17 @@ public class FPSController : MonoBehaviour
         camera.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
+
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
+        {
+            Debug.Log("Jump triggered");
+            _yVelocity = Mathf.Sqrt(2 * _jumpForce * -_gravity); 
+        }
+
+
+    }
     private void LateUpdate()
     {
 
