@@ -28,6 +28,15 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float smoothTime = .1f;
     
     #endregion
+
+    [Header("Respawn System")]
+    public Transform[] respawnPoints;
+    public int currentRespawnIndex;
+    private float _health = 100f;
+    private float _maxHealth = 100f;
+
+
+
     void Start()
     {
         Cursor.visible = false;
@@ -44,6 +53,12 @@ public class FPSController : MonoBehaviour
         Movement();
         Rotation();
         Jump();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Debug.Log("Die");
+            takeDamage(_health);
+        }
     }
 
     private void Movement()
@@ -85,11 +100,48 @@ public class FPSController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             Debug.Log("Jump triggered");
-            _yVelocity = Mathf.Sqrt(2 * _jumpForce * -_gravity); 
+            _yVelocity = Mathf.Sqrt(2 * _jumpForce * -_gravity);
         }
 
 
     }
+
+
+    void Respawn()
+    {
+        if (respawnPoints.Length > 0)
+        {
+            Transform respawnPoint = respawnPoints[currentRespawnIndex];
+            transform.position = respawnPoint.position;
+            _health = _maxHealth;
+            Debug.Log("Player has respawned at: " + respawnPoint.position);
+        }
+        else
+        {
+            Debug.LogWarning("No respawn points assigned!");
+        }
+    }
+
+
+
+    void takeDamage(float damage)
+    {
+        _health -= damage;
+        Debug.Log("Health: " + _health); 
+
+        if (_health <= 0)
+        {
+            Debug.Log("Player died. Respawning...");
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Respawn();
+    }
+
+ 
     private void LateUpdate()
     {
 
