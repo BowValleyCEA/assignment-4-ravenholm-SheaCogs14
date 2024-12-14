@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-//Note: this is a terrible name for this class; please feel free to change it
 public class Targeter : MonoBehaviour
 {
     [SerializeField] private Transform targetOrigin;

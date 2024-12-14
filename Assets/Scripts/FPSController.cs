@@ -124,7 +124,7 @@ public class FPSController : MonoBehaviour
 
 
 
-    void takeDamage(float damage)
+    public void takeDamage(float damage)
     {
         _health -= damage;
         Debug.Log("Health: " + _health); 
@@ -136,7 +136,7 @@ public class FPSController : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         Respawn();
     }
