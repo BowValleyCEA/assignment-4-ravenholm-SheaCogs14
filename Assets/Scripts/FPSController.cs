@@ -114,11 +114,7 @@ public class FPSController : MonoBehaviour
             Transform respawnPoint = respawnPoints[currentRespawnIndex];
             transform.position = respawnPoint.position;
             _health = _maxHealth;
-            Debug.Log("Player has respawned at: " + respawnPoint.position);
-        }
-        else
-        {
-            Debug.LogWarning("No respawn points assigned!");
+            _yVelocity = 0;
         }
     }
 
@@ -127,11 +123,9 @@ public class FPSController : MonoBehaviour
     public void takeDamage(float damage)
     {
         _health -= damage;
-        Debug.Log("Health: " + _health); 
 
         if (_health <= 0)
         {
-            Debug.Log("Player died. Respawning...");
             Die();
         }
     }
@@ -139,12 +133,5 @@ public class FPSController : MonoBehaviour
     public void Die()
     {
         Respawn();
-    }
-
- 
-    private void LateUpdate()
-    {
-
-        
     }
 }

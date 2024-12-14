@@ -6,13 +6,13 @@ public class DeathBox : MonoBehaviour
 {
 
 
-    [SerializeField] public string playerTag = "Player";
-    [SerializeField] private int _damageToPlayer = 100;
+
+    [SerializeField] private int _damageToPlayer = 1000;
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(playerTag))
+        if (other.CompareTag("Player"))
         {
             var playerController = other.GetComponent<FPSController>();
             if (playerController != null)

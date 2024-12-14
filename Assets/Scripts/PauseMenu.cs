@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject Pause;
+    [SerializeField] private GameObject OverLevel;
+
     private bool _isPaused = false;
 
 
@@ -44,5 +46,9 @@ public class PauseMenu : MonoBehaviour
         _isPaused = false;
     }
 
-
+    public void LevelOver()
+    {
+        OverLevel.SetActive(true);
+        Time.timeScale = 0.0f;
+    }
 }
